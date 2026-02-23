@@ -29,11 +29,11 @@ function getCategoryIcon(category: string) {
 
 export default function CoursesPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight font-[family-name:var(--font-display)]">My Courses</h1>
-          <p className="text-sm text-muted-foreground">Browse and manage your enrolled courses</p>
+          <h1 className="text-3xl font-bold tracking-tight font-[family-name:var(--font-display)]">My Courses</h1>
+          <p className="text-muted-foreground mt-1">Browse and manage your enrolled courses</p>
         </div>
         <div className="relative w-full sm:w-72">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -59,9 +59,9 @@ export default function CoursesPage() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {courses.map((course) => (
           <Link key={course.id} href={`/dashboard/courses/${course.id}`}>
-            <Card className="h-full transition-all hover:shadow-md hover:border-primary/20 cursor-pointer group">
+            <Card className="h-full transition-all hover:shadow-lg hover:border-accent/30 cursor-pointer group border-border/50">
               {/* Header accent bar */}
-              <div className="h-1.5 rounded-t-lg bg-primary" style={{ opacity: Math.max(0.2, course.progress / 100) }} />
+              <div className="h-1 rounded-t-lg bg-accent" style={{ opacity: Math.max(0.25, course.progress / 100) }} />
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between gap-2">
                   <Badge variant="secondary" className={getLevelColor(course.level)}>

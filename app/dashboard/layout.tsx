@@ -11,9 +11,9 @@ export default function DashboardLayout({
       <div className="hidden lg:block">
         <AppSidebar />
       </div>
-      <div className="flex-1 lg:ml-60">
+      <div className="flex-1 lg:ml-64">
         <TopBar />
-        <main className="p-4 lg:p-6">{children}</main>
+        <main className="p-5 lg:p-8">{children}</main>
       </div>
     </div>
   )

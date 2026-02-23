@@ -46,70 +46,70 @@ export default function DashboardPage() {
   const completedCourses = courses.filter((c) => c.progress === 100).length
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Welcome Header */}
-      <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold tracking-tight font-[family-name:var(--font-display)]">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold tracking-tight font-[family-name:var(--font-display)]">
           Welcome back, {currentUser.name.split(" ")[0]}
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground">
           Track your progress and continue learning supply chain management
         </p>
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Card>
-          <CardContent className="flex items-center gap-3 p-4">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Card className="border-border/50 shadow-sm">
+          <CardContent className="flex items-center gap-4 p-5">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
               <BookOpen className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <p className="text-2xl font-bold">{enrolledCourses.length}</p>
-              <p className="text-xs text-muted-foreground">Enrolled Courses</p>
+              <p className="text-3xl font-bold">{enrolledCourses.length}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Enrolled Courses</p>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="flex items-center gap-3 p-4">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-success/10">
+        <Card className="border-border/50 shadow-sm">
+          <CardContent className="flex items-center gap-4 p-5">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-success/10">
               <TrendingUp className="h-5 w-5 text-success" />
             </div>
             <div>
-              <p className="text-2xl font-bold">{overallProgress}%</p>
-              <p className="text-xs text-muted-foreground">Average Progress</p>
+              <p className="text-3xl font-bold">{overallProgress}%</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Average Progress</p>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="flex items-center gap-3 p-4">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10">
+        <Card className="border-border/50 shadow-sm">
+          <CardContent className="flex items-center gap-4 p-5">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent/10">
               <CheckCircle2 className="h-5 w-5 text-accent" />
             </div>
             <div>
-              <p className="text-2xl font-bold">{completedCourses}</p>
-              <p className="text-xs text-muted-foreground">Completed</p>
+              <p className="text-3xl font-bold">{completedCourses}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Completed</p>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="flex items-center gap-3 p-4">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-destructive/10">
+        <Card className="border-border/50 shadow-sm">
+          <CardContent className="flex items-center gap-4 p-5">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-destructive/10">
               <AlertCircle className="h-5 w-5 text-destructive" />
             </div>
             <div>
-              <p className="text-2xl font-bold">{upcomingAssignments.length}</p>
-              <p className="text-xs text-muted-foreground">Due Assignments</p>
+              <p className="text-3xl font-bold">{upcomingAssignments.length}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Due Assignments</p>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-8 lg:grid-cols-3">
         {/* Main: Course Cards */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="lg:col-span-2 space-y-5">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold font-[family-name:var(--font-display)]">Continue Learning</h2>
+            <h2 className="text-xl font-semibold font-[family-name:var(--font-display)]">Continue Learning</h2>
             <Link href="/dashboard/courses">
               <Button variant="ghost" size="sm" className="text-primary">
                 View All <ArrowRight className="ml-1 h-3.5 w-3.5" />
@@ -120,11 +120,11 @@ export default function DashboardPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             {recentCourses.map((course) => (
               <Link key={course.id} href={`/dashboard/courses/${course.id}`}>
-                <Card className="h-full transition-all hover:shadow-md hover:border-primary/20 cursor-pointer group">
+                <Card className="h-full transition-all hover:shadow-lg hover:border-accent/30 cursor-pointer group border-border/50">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between gap-2">
-                      <div className="space-y-1 flex-1 min-w-0">
-                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${getLevelColor(course.level)}`}>
+                      <div className="space-y-1.5 flex-1 min-w-0">
+                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-wide ${getLevelColor(course.level)}`}>
                           {course.level}
                         </span>
                         <CardTitle className="text-base leading-tight group-hover:text-primary transition-colors">
@@ -179,8 +179,8 @@ export default function DashboardPage() {
         </div>
 
         {/* Sidebar: Deadlines & Notifications */}
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold font-[family-name:var(--font-display)]">Upcoming Deadlines</h2>
+        <div className="space-y-5">
+          <h2 className="text-xl font-semibold font-[family-name:var(--font-display)]">Upcoming Deadlines</h2>
           <div className="space-y-3">
             {upcomingAssignments.map((assignment) => {
               const course = courses.find((c) => c.id === assignment.courseId)

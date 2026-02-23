@@ -48,7 +48,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ c
   const currentLesson = currentModule?.lessons.find((l) => !l.isCompleted)
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Back nav */}
       <Link href="/dashboard/courses" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
         <ArrowLeft className="h-3.5 w-3.5" /> Back to Courses
@@ -65,7 +65,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ c
               Synced from Moodle
             </div>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight font-[family-name:var(--font-display)] lg:text-3xl">
+          <h1 className="text-3xl font-bold tracking-tight font-[family-name:var(--font-display)] lg:text-4xl">
             {course.title}
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">{course.description}</p>

@@ -21,7 +21,7 @@ export function TopBar() {
   const unreadCount = notifications.filter((n) => !n.isRead).length
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-card px-4 lg:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border/60 bg-card/80 backdrop-blur-md px-5 lg:px-8">
       {/* Mobile menu */}
       <Sheet>
         <SheetTrigger asChild>
@@ -30,7 +30,7 @@ export function TopBar() {
             <span className="sr-only">Toggle menu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-60 p-0">
+        <SheetContent side="left" className="w-64 p-0">
           <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
           <AppSidebar />
         </SheetContent>
@@ -41,16 +41,16 @@ export function TopBar() {
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           placeholder="Search courses, modules, resources..."
-          className="pl-9 bg-secondary/50 border-transparent focus:border-border"
+          className="pl-9 bg-secondary/60 border-transparent focus:border-border h-10"
         />
       </div>
 
       <div className="flex-1 md:hidden" />
 
       {/* Right side */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         {/* Moodle sync indicator */}
-        <div className="hidden sm:flex items-center gap-1.5 rounded-full bg-success/10 px-3 py-1.5">
+        <div className="hidden sm:flex items-center gap-1.5 rounded-full border border-success/20 bg-success/5 px-3 py-1.5">
           <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
           <span className="text-xs font-medium text-success">Moodle Synced</span>
         </div>
@@ -58,10 +58,10 @@ export function TopBar() {
         {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-4.5 w-4.5" />
+            <Button variant="ghost" size="icon" className="relative h-9 w-9">
+              <Bell className="h-[18px] w-[18px]" />
               {unreadCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-card">
+                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground">
                   {unreadCount}
                 </span>
               )}
@@ -74,7 +74,7 @@ export function TopBar() {
             {notifications.map((n) => (
               <DropdownMenuItem key={n.id} className="flex flex-col items-start gap-1 py-3">
                 <div className="flex items-center gap-2">
-                  {!n.isRead && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+                  {!n.isRead && <span className="h-1.5 w-1.5 rounded-full bg-accent" />}
                   <span className="text-sm font-medium">{n.title}</span>
                 </div>
                 <span className="text-xs text-muted-foreground">{n.message}</span>
@@ -87,14 +87,14 @@ export function TopBar() {
         {/* User */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="flex items-center gap-2 px-2">
-              <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">
+            <Button variant="ghost" className="flex items-center gap-2.5 px-2 h-10">
+              <Avatar className="h-8 w-8 ring-2 ring-primary/10">
+                <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
                   {currentUser.name.split(" ").map((n) => n[0]).join("")}
                 </AvatarFallback>
               </Avatar>
               <div className="hidden md:flex flex-col items-start">
-                <span className="text-sm font-medium">{currentUser.name}</span>
+                <span className="text-sm font-semibold">{currentUser.name}</span>
                 <span className="text-[10px] text-muted-foreground capitalize">{currentUser.role}</span>
               </div>
             </Button>

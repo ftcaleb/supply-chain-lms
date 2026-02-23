@@ -43,25 +43,28 @@ export function AppSidebar() {
     <TooltipProvider delayDuration={0}>
       <aside
         className={cn(
-          "fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-all duration-300",
-          collapsed ? "w-16" : "w-60"
+          "fixed left-0 top-0 z-40 flex h-screen flex-col bg-sidebar text-sidebar-foreground transition-all duration-300",
+          collapsed ? "w-[68px]" : "w-64"
         )}
       >
         {/* Logo */}
-        <div className="flex h-16 items-center gap-3 border-b border-sidebar-border px-4">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary">
+        <div className="flex h-16 items-center gap-3 px-4">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary">
             <GraduationCap className="h-4 w-4 text-sidebar-primary-foreground" />
           </div>
           {!collapsed && (
             <div className="flex flex-col">
-              <span className="text-sm font-semibold tracking-tight">ChainLearn</span>
-              <span className="text-[10px] text-sidebar-foreground/60">Supply Chain LMS</span>
+              <span className="text-sm font-bold tracking-tight font-[family-name:var(--font-display)]">ChainLearn</span>
+              <span className="text-[10px] text-sidebar-foreground/45 font-medium tracking-wide">SUPPLY CHAIN LMS</span>
             </div>
           )}
         </div>
 
+        {/* Divider */}
+        <div className="mx-3 border-t border-sidebar-border" />
+
         {/* Nav */}
-        <nav className="flex-1 space-y-1 px-2 py-4">
+        <nav className="flex-1 space-y-1 px-3 py-4">
           {navItems.map((item) => {
             const isActive = pathname === item.href || (item.href !== "/dashboard" && item.href !== "/admin" && pathname.startsWith(item.href))
             const isDashboardActive = (item.href === "/dashboard" && pathname === "/dashboard") || (item.href === "/admin" && pathname === "/admin")
@@ -71,13 +74,13 @@ export function AppSidebar() {
               <Link
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
                   active
-                    ? "bg-sidebar-accent text-sidebar-primary"
-                    : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                    ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
+                    : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground"
                 )}
               >
-                <item.icon className="h-4.5 w-4.5 shrink-0" />
+                <item.icon className="h-[18px] w-[18px] shrink-0" />
                 {!collapsed && <span>{item.label}</span>}
               </Link>
             )
@@ -86,7 +89,7 @@ export function AppSidebar() {
               return (
                 <Tooltip key={item.href}>
                   <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
-                  <TooltipContent side="right" className="bg-foreground text-background">
+                  <TooltipContent side="right" className="bg-primary text-primary-foreground border-primary">
                     {item.label}
                   </TooltipContent>
                 </Tooltip>
@@ -103,14 +106,14 @@ export function AppSidebar() {
               <TooltipTrigger asChild>
                 <Link
                   href="/admin"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors"
+                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all"
                 >
-                  <Users className="h-4.5 w-4.5 shrink-0" />
+                  <Users className="h-[18px] w-[18px] shrink-0" />
                   {!collapsed && <span>Admin Panel</span>}
                 </Link>
               </TooltipTrigger>
               {collapsed && (
-                <TooltipContent side="right" className="bg-foreground text-background">
+                <TooltipContent side="right" className="bg-primary text-primary-foreground border-primary">
                   Admin Panel
                 </TooltipContent>
               )}
@@ -120,14 +123,14 @@ export function AppSidebar() {
               <TooltipTrigger asChild>
                 <Link
                   href="/dashboard"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors"
+                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all"
                 >
-                  <LayoutDashboard className="h-4.5 w-4.5 shrink-0" />
+                  <LayoutDashboard className="h-[18px] w-[18px] shrink-0" />
                   {!collapsed && <span>Student View</span>}
                 </Link>
               </TooltipTrigger>
               {collapsed && (
-                <TooltipContent side="right" className="bg-foreground text-background">
+                <TooltipContent side="right" className="bg-primary text-primary-foreground border-primary">
                   Student View
                 </TooltipContent>
               )}
@@ -136,19 +139,19 @@ export function AppSidebar() {
         </nav>
 
         {/* Bottom */}
-        <div className="border-t border-sidebar-border p-2 space-y-1">
+        <div className="border-t border-sidebar-border p-3 space-y-1">
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
                 href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors"
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all"
               >
-                <Settings className="h-4.5 w-4.5 shrink-0" />
+                <Settings className="h-[18px] w-[18px] shrink-0" />
                 {!collapsed && <span>Settings</span>}
               </Link>
             </TooltipTrigger>
             {collapsed && (
-              <TooltipContent side="right" className="bg-foreground text-background">
+              <TooltipContent side="right" className="bg-primary text-primary-foreground border-primary">
                 Settings
               </TooltipContent>
             )}
@@ -157,14 +160,14 @@ export function AppSidebar() {
             <TooltipTrigger asChild>
               <Link
                 href="/"
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/70 hover:bg-destructive/10 hover:text-destructive transition-colors"
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/60 hover:bg-destructive/10 hover:text-destructive transition-all"
               >
-                <LogOut className="h-4.5 w-4.5 shrink-0" />
+                <LogOut className="h-[18px] w-[18px] shrink-0" />
                 {!collapsed && <span>Sign Out</span>}
               </Link>
             </TooltipTrigger>
             {collapsed && (
-              <TooltipContent side="right" className="bg-foreground text-background">
+              <TooltipContent side="right" className="bg-primary text-primary-foreground border-primary">
                 Sign Out
               </TooltipContent>
             )}
@@ -176,7 +179,7 @@ export function AppSidebar() {
           variant="ghost"
           size="icon"
           onClick={() => setCollapsed(!collapsed)}
-          className="absolute -right-3 top-20 z-50 h-6 w-6 rounded-full border border-border bg-card text-muted-foreground shadow-sm hover:bg-secondary"
+          className="absolute -right-3 top-20 z-50 h-6 w-6 rounded-full border border-border bg-card text-muted-foreground shadow-md hover:bg-secondary"
         >
           {collapsed ? <ChevronRight className="h-3 w-3" /> : <ChevronLeft className="h-3 w-3" />}
         </Button>

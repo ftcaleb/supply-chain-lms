@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Space_Grotesk } from 'next/font/google'
+import { DM_Sans, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
-const _spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk" })
+const _dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans" })
+const _playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" })
 
 export const metadata: Metadata = {
   title: 'ChainLearn - Supply Chain LMS',
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#1e3a5f',
+  themeColor: '#0a1628',
   width: 'device-width',
   initialScale: 1,
 }
@@ -42,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${_inter.variable} ${_spaceGrotesk.variable} font-sans antialiased`}>
+      <body className={`${_dmSans.variable} ${_playfair.variable} font-sans antialiased`}>
         {children}
         <Analytics />
       </body>
