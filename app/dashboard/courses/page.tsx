@@ -69,31 +69,31 @@ function accentOpacity(progress: number) {
 // ---------------------------------------------------------------------------
 export default async function CoursesPage() {
   const cookieStore = await cookies()
-  const token =
-    cookieStore.get("moodle_token")?.value ?? process.env.MOODLE_TOKEN ?? null
+  const token = cookieStore.get("moodle_token")?.value ?? null
+  const userId = cookieStore.get("moodle_userid")?.value ?? null
 
   let courses: NormalizedCourse[] = []
   let fetchError: string | null = null
 
   if (!token) {
-    fetchError = "You are not authenticated. Please log in to view your courses."
+    fetchError = "__UNAUTHORIZED__"
   } else {
     try {
       const baseUrl =
         process.env.NEXT_PUBLIC_BASE_URL ??
         `http://localhost:${process.env.PORT ?? 3000}`
 
-      const cookieHeader = cookieStore.get("moodle_token")
-        ? `moodle_token=${token}`
-        : ""
+      // Forward both cookies so the API route has everything it needs
+      const cookieParts = [`moodle_token=${token}`]
+      if (userId) cookieParts.push(`moodle_userid=${userId}`)
 
       const res = await fetch(`${baseUrl}/api/courses`, {
         cache: "no-store",
-        headers: cookieHeader ? { Cookie: cookieHeader } : {},
+        headers: { Cookie: cookieParts.join("; ") },
       })
 
       if (res.status === 401) {
-        fetchError = "Your session has expired. Please log in again."
+        fetchError = "__UNAUTHORIZED__"
       } else if (!res.ok) {
         const body = await res.json().catch(() => ({}))
         fetchError = body?.error ?? `Failed to load courses (HTTP ${res.status}).`
@@ -143,8 +143,28 @@ export default async function CoursesPage() {
         )}
       </div>
 
-      {/* Error state */}
-      {fetchError && (
+      {/* Unauthorized state */}
+      {fetchError === "__UNAUTHORIZED__" && (
+        <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-destructive/30 bg-destructive/5 py-20 text-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
+            <AlertCircle className="h-8 w-8 text-destructive" />
+          </div>
+          <div>
+            <p className="text-base font-semibold">Session required</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              Please log in to view your enrolled courses.
+            </p>
+          </div>
+          <Link href="/">
+            <Button size="sm" variant="outline">
+              Return to Login
+            </Button>
+          </Link>
+        </div>
+      )}
+
+      {/* Other error state */}
+      {fetchError && fetchError !== "__UNAUTHORIZED__" && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Could not load courses</AlertTitle>

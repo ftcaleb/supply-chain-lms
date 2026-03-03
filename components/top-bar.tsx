@@ -1,6 +1,6 @@
 "use client"
 
-import { Bell, Search, Menu } from "lucide-react"
+import { Bell, Search, Menu, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -16,9 +16,20 @@ import {
 import { currentUser, notifications } from "@/lib/mock-data"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
 import { AppSidebar } from "./app-sidebar"
+import { useRouter } from "next/navigation"
 
 export function TopBar() {
+  const router = useRouter()
   const unreadCount = notifications.filter((n) => !n.isRead).length
+
+  async function handleLogout() {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" })
+    } catch {
+      // Best-effort: even if the request fails, redirect to login
+    }
+    router.push("/")
+  }
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border/60 bg-card/80 backdrop-blur-md px-5 lg:px-8">
@@ -105,7 +116,13 @@ export function TopBar() {
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive">Sign Out</DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-destructive focus:text-destructive gap-2"
+              onClick={handleLogout}
+            >
+              <LogOut className="h-4 w-4" />
+              Sign Out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

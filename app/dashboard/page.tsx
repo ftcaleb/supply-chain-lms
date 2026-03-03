@@ -46,11 +46,11 @@ function getStatusBadge(status: string) {
 
 export default async function DashboardPage() {
   // ---------------------------------------------------------------------------
-  // Fetch Moodle courses server-side
+  // Fetch Moodle courses server-side (cookie-only — no admin token fallback)
   // ---------------------------------------------------------------------------
   const cookieStore = await cookies()
-  const token =
-    cookieStore.get("moodle_token")?.value ?? process.env.MOODLE_TOKEN ?? null
+  const token = cookieStore.get("moodle_token")?.value ?? null
+  const userId = cookieStore.get("moodle_userid")?.value ?? null
 
   let courses: NormalizedCourse[] = []
 
@@ -60,13 +60,13 @@ export default async function DashboardPage() {
         process.env.NEXT_PUBLIC_BASE_URL ??
         `http://localhost:${process.env.PORT ?? 3000}`
 
-      const cookieHeader = cookieStore.get("moodle_token")
-        ? `moodle_token=${token}`
-        : ""
+      // Forward both cookies so the API route has the userid immediately
+      const cookieParts = [`moodle_token=${token}`]
+      if (userId) cookieParts.push(`moodle_userid=${userId}`)
 
       const res = await fetch(`${baseUrl}/api/courses`, {
         cache: "no-store",
-        headers: cookieHeader ? { Cookie: cookieHeader } : {},
+        headers: { Cookie: cookieParts.join("; ") },
       })
 
       if (res.ok) {
@@ -78,6 +78,7 @@ export default async function DashboardPage() {
       // Non-fatal: stats degrade to 0
     }
   }
+
 
   // ---------------------------------------------------------------------------
   // Derived stats

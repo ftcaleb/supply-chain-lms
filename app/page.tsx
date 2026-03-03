@@ -8,27 +8,51 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { GraduationCap, ArrowRight, Eye, EyeOff, Package, Truck, BarChart3, Globe, Users, Award, Star } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { GraduationCap, ArrowRight, Eye, EyeOff, Package, Truck, BarChart3, Globe, AlertCircle, Star } from "lucide-react"
 
 export default function AuthPage() {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [loginError, setLoginError] = useState<string | null>(null)
 
-  function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    setLoginError(null)
     setIsLoading(true)
-    setTimeout(() => {
+
+    const form = e.currentTarget
+    const username = (form.elements.namedItem("username") as HTMLInputElement).value
+    const password = (form.elements.namedItem("password") as HTMLInputElement).value
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      })
+
+      const data = await res.json().catch(() => ({}))
+
+      if (!res.ok) {
+        setLoginError(data?.error ?? "Login failed. Please try again.")
+        return
+      }
+
+      // Success — token is now stored in HTTP-only cookie
       router.push("/dashboard")
-    }, 800)
+    } catch {
+      setLoginError("Unable to reach the server. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   function handleRegister(e: React.FormEvent) {
     e.preventDefault()
-    setIsLoading(true)
-    setTimeout(() => {
-      router.push("/dashboard")
-    }, 800)
+    // Registration is handled in Moodle; redirect to dashboard for now.
+    router.push("/dashboard")
   }
 
   return (
@@ -138,9 +162,18 @@ export default function AuthPage() {
                   <CardDescription>Sign in to continue your learning journey</CardDescription>
                 </div>
                 <form onSubmit={handleLogin} className="space-y-4">
+                  {loginError && (
+                    <Alert variant="destructive" className="py-2">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>{loginError}</AlertDescription>
+                    </Alert>
+                  )}
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="you@university.edu" required className="h-11" />
+                    <Label htmlFor="username">Username</Label>
+                    <Input id="username" name="username" type="text" placeholder="Enter your Moodle username" required className="h-11" autoComplete="username" />
+                    <p className="text-[11px] text-muted-foreground">
+                      Use your <strong>Moodle username</strong> (not your email address). Your username was set by your administrator.
+                    </p>
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
@@ -152,10 +185,12 @@ export default function AuthPage() {
                     <div className="relative">
                       <Input
                         id="password"
+                        name="password"
                         type={showPassword ? "text" : "password"}
                         placeholder="Enter your password"
                         required
                         className="h-11"
+                        autoComplete="current-password"
                       />
                       <Button
                         type="button"
@@ -186,56 +221,64 @@ export default function AuthPage() {
 
                 <Button variant="outline" className="w-full h-11" onClick={() => router.push("/dashboard")}>
                   <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                   Sign in with Moodle SSO
                 </Button>
               </TabsContent>
 
-              {/* Register Tab */}
+              {/* Register Tab — Moodle manages all accounts */}
               <TabsContent value="register" className="mt-0">
                 <div className="space-y-1 mb-6">
                   <CardTitle className="text-xl font-[family-name:var(--font-display)]">Create account</CardTitle>
-                  <CardDescription>Start your supply chain learning journey</CardDescription>
+                  <CardDescription>How to get access to SkillHub</CardDescription>
                 </div>
-                <form onSubmit={handleRegister} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">First Name</Label>
-                      <Input id="firstName" placeholder="Alex" required className="h-11" />
+
+                <div className="rounded-xl border border-primary/20 bg-primary/5 p-5 space-y-4">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                      <GraduationCap className="h-5 w-5 text-primary" />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">Last Name</Label>
-                      <Input id="lastName" placeholder="Nakamura" required className="h-11" />
+                    <div>
+                      <p className="text-sm font-semibold">Accounts are managed by Moodle</p>
+                      <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                        SkillHub uses your institution&apos;s Moodle LMS for authentication.
+                        Accounts are created by your Moodle administrator — you cannot self-register here.
+                      </p>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="regEmail">Email</Label>
-                    <Input id="regEmail" type="email" placeholder="you@university.edu" required className="h-11" />
+
+                  <div className="space-y-2 text-xs">
+                    <p className="font-medium text-muted-foreground uppercase tracking-wide">How to get access:</p>
+                    <ol className="space-y-1.5 text-muted-foreground list-decimal list-inside">
+                      <li>Contact your Moodle administrator to create your account</li>
+                      <li>Use your assigned Moodle <strong className="text-foreground">username</strong> (not email) to sign in</li>
+                      <li>Enrol in your courses via Moodle — they will appear here automatically</li>
+                    </ol>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="role">Role</Label>
-                    <select
-                      id="role"
-                      className="flex h-11 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                      defaultValue="student"
-                    >
-                      <option value="student">Student</option>
-                      <option value="lecturer">Lecturer</option>
-                      <option value="admin">Administrator</option>
-                    </select>
+
+                  <div className="rounded-lg border border-border bg-background/60 px-3 py-2">
+                    <p className="text-[11px] text-muted-foreground">Moodle instance:</p>
+                    <p className="text-xs font-mono font-medium">{process.env.NEXT_PUBLIC_MOODLE_URL ?? "http://localhost:8080"}</p>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="regPassword">Password</Label>
-                    <Input id="regPassword" type="password" placeholder="Create a password" required className="h-11" />
-                  </div>
-                  <Button type="submit" className="w-full h-11 text-sm font-semibold" disabled={isLoading}>
-                    {isLoading ? "Creating account..." : "Create Account"}
-                    {!isLoading && <ArrowRight className="ml-2 h-4 w-4" />}
-                  </Button>
-                </form>
+                </div>
+
+                <div className="mt-5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const tabs = document.querySelector<HTMLButtonElement>('[data-value="login"]')
+                      tabs?.click()
+                    }}
+                    className="w-full"
+                  >
+                    <span className="flex h-11 w-full items-center justify-center rounded-md border border-input bg-transparent px-4 text-sm font-semibold hover:bg-accent hover:text-accent-foreground transition-colors">
+                      Back to Sign In <ArrowRight className="ml-2 h-4 w-4" />
+                    </span>
+                  </button>
+                </div>
               </TabsContent>
             </CardContent>
           </Tabs>
